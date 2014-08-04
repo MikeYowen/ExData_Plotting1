@@ -1,0 +1,18 @@
+data <- read.csv("household_power_consumption.txt", sep = ";")
+data[,1] <- as.Date(data[,1], "%d/%m/%Y")
+
+data1 <- subset(data, data[,1] == as.Date("01/02/2007", "%d/%m/%Y"))
+data2 <- subset(data, data[,1] == as.Date("02/02/2007", "%d/%m/%Y"))
+data <-  rbind(data1, data2)
+data$DateTime <- strptime(paste(data$Date, data$Time), "%d/%m/%Y %H:%M:%S") 
+
+png("plot4.png", width = 480, height = 480)
+par(mfrow=c(2,2))
+plot(data[,10],as.numeric(as.character(data[,3])), type="l", xlab="", ylab="Global Active Power")
+plot(data[,10],as.numeric(as.character(data[,5])), type="l", xlab="datetime", ylab="Voltage")
+plot(data[,10],as.numeric(as.character(data[,7])), type="l", xlab="", ylab="Energy sub metering")
+lines(data[,10],as.numeric(as.character(data[,8])), col="red")
+lines(data[,10],as.numeric(as.character(data[,9])), col="blue")
+legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col=c("black","red","blue"), lty=1, bty="n")
+plot(data[,10],as.numeric(as.character(data[,4])), type="l", xlab="datetime", ylab="Global_reactive_power")
+dev.off()
